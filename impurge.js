@@ -1,5 +1,6 @@
 var request = require("request")
 var xray = require("x-ray")
+var x = xray();
 var async = require("async")
 var impurge = [];
 
@@ -81,15 +82,13 @@ impurge.purge = function(url, callback) {
                 return;
             } else if (type === 'album_url') {
                 var url = 'http://imgur.com/a/'+ id
-                xray(url)
-                    .select([".post-image img[src]"])
-                    .run(function(err, array) {
-                        for (var i in array) {
-                            array[i] =  "http://"+array[i].slice(18) //need to remove the extra imgur name 'http://imgur.com//i.imgur.com/L09GyzP.jpg'
-                        }
-                        callback(err,array);
-                        return;
-                    });
+                x(url, [".post-image-container"])(function(err, array) {
+					for (var i in array) {
+						array[i] =  "http://"+array[i].slice(18) //need to remove the extra imgur name 'http://imgur.com//i.imgur.com/L09GyzP.jpg'
+					}
+					callback(err,array);
+					return;
+				});
             } else if (type === 'hash_url' && id.length > 1) {
                 for (var i in id) {
                     id[i] =  "http://imgur.com/"+id[i]
@@ -102,24 +101,20 @@ impurge.purge = function(url, callback) {
             } else if (type === 'hash_url') {
 
                 url = "http://imgur.com/"+id
-                xray(url)
-                    .select(".post-image img[src]")
-                    .run(function(err, item) {
-                        item = "http://"+item.slice(18)
-                        callback(err,[item]);
-                        return;
-                    });
+                x(url, ".post-image img[src]")(function(err, item) {
+					item = "http://"+item.slice(18)
+					callback(err,[item]);
+					return;
+				});
             } else if (type === 'gallery_url') {
                 var url = 'http://imgur.com/gallery/'+ id
-                xray(url)
-                    .select([".post-image img[src]"])
-                    .run(function(err, array) {
-                        for (var i in array) {
-                            array[i] =  "http://"+array[i].slice(18) //need to remove the extra imgur name 'http://imgur.com//i.imgur.com/L09GyzP.jpg'
-                        }
-                        callback(err,array);
-                        return;
-                    });
+                x(url, [".post-image img[src]"])(function(err, array) {
+					for (var i in array) {
+						array[i] =  "http://"+array[i].slice(18) //need to remove the extra imgur name 'http://imgur.com//i.imgur.com/L09GyzP.jpg'
+					}
+					callback(err,array);
+					return;
+				});
             } else {
                 callback("unknown_link_error")
                 return;
