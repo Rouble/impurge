@@ -82,9 +82,9 @@ impurge.purge = function(url, callback) {
                 return;
             } else if (type === 'album_url') {
                 var url = 'http://imgur.com/a/'+ id
-                x(url, [".post-image-container"])(function(err, array) {
+                x(url, [".post-image-container@id"])(function(err, array) {
 					for (var i in array) {
-						array[i] =  "http://"+array[i].slice(18) //need to remove the extra imgur name 'http://imgur.com//i.imgur.com/L09GyzP.jpg'
+						array[i] =  "http://i.imgur.com/" + array[i] + ".jpg" //wrap up some image id's in an i.imgur url and call them jpg's 
 					}
 					callback(err,array);
 					return;
@@ -101,16 +101,16 @@ impurge.purge = function(url, callback) {
             } else if (type === 'hash_url') {
 
                 url = "http://imgur.com/"+id
-                x(url, ".post-image img[src]")(function(err, item) {
-					item = "http://"+item.slice(18)
+                x(url, ".post-image-container@id")(function(err, item) {
+					item = "http://i.imgur.com/"+ item + ".jpg"
 					callback(err,[item]);
 					return;
 				});
             } else if (type === 'gallery_url') {
                 var url = 'http://imgur.com/gallery/'+ id
-                x(url, [".post-image img[src]"])(function(err, array) {
+                x(url, [".post-image-container@id"])(function(err, array) {
 					for (var i in array) {
-						array[i] =  "http://"+array[i].slice(18) //need to remove the extra imgur name 'http://imgur.com//i.imgur.com/L09GyzP.jpg'
+						array[i] =  "http://i.imgur.com/" + array[i] + ".jpg" //need to remove the extra imgur name 'http://imgur.com//i.imgur.com/L09GyzP.jpg'
 					}
 					callback(err,array);
 					return;
