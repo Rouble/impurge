@@ -3,7 +3,7 @@ This is a simple module meant to extract image URLs from imgur pages in a standa
 
 Example:
 ```js
-var impurge = require('impurge');
+var impurge = require('impurge-updated');
   impurge.purge("http://imgur.com/IvpcP", function  (e,r) {
   console.log(r)
 });
@@ -18,7 +18,7 @@ http://i.imgur.com/IvpcP.jpg
 or for multiple images
 
 ```js
-var impurge = require('impurge');
+var impurge = require('impurge-updated');
   impurge.purge("http://imgur.com/a/QgHRA", function  (e,r) {
   console.log(r)
 });
